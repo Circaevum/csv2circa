@@ -6,7 +6,7 @@ public class circa_double : MonoBehaviour
 {
     LineRenderer lineRenderer;
 
-    public void Plot(float[] time_angles, double[] doubles)
+    public void Plot(double[] doubles)
     {
         transform.position = transform.parent.position;
         lineRenderer = GetComponent<LineRenderer>();

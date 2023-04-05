@@ -14,37 +14,15 @@ public class csv_reader : MonoBehaviour
     public GameObject CircaDouble;
     private List<SchoolData> dataList;
     private float[] time_angles;
-    private hhmmss2degrees converter;
 
     void Start()
     {
-        converter = new hhmmss2degrees();
         string filePath = Application.streamingAssetsPath + "/data.csv";
         using (var reader = new StreamReader(filePath))
         using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
         {
             dataList = csv.GetRecords<SchoolData>().ToList();
         }
-
-        time_angles = new float[dataList.Count];
-        string[] firstColumnArray = dataList.Select(x => x.Time).ToArray();
-        foreach (string str in firstColumnArray)
-        {
-            int index = Array.IndexOf(firstColumnArray, str);
-            float angle = converter.time2degrees(str);
-            print("Converted " + str + " angle " + angle);
-            time_angles[index] = angle;
-        }
-
-        PlotColumns();
-    }
-    void PlotColumns()
-    {
-        foreach (float angle in time_angles)
-        {
-            print("This is the angle: " + angle);
-        }
-
         int i = 0;
         //Iterate through each property of the SchoolData data class
         foreach (var property in typeof(SchoolData).GetProperties())
@@ -60,7 +38,7 @@ public class csv_reader : MonoBehaviour
                     newIntLine.SetActive(true);
                     newIntLine.transform.SetParent(transform);
                     newIntLine.transform.position = new Vector3(0, 0, 0);
-                    newIntLine.GetComponent<circa_int>().Plot(time_angles, intArray);
+                    newIntLine.GetComponent<circa_int>().Plot(intArray);
                     break;
 
                 //Create lineRenderer specific to DOUBLE value types
@@ -70,7 +48,7 @@ public class csv_reader : MonoBehaviour
                     newDoubleLine.SetActive(true);
                     newDoubleLine.transform.SetParent(transform);
                     newDoubleLine.transform.position = new Vector3(0, 0, 0);
-                    newDoubleLine.GetComponent<circa_double>().Plot(time_angles, doubleArray);
+                    newDoubleLine.GetComponent<circa_double>().Plot(doubleArray);
                     break;
 
                 //Create lineRenderer specific to BOOLEAN value types
@@ -80,7 +58,7 @@ public class csv_reader : MonoBehaviour
                     newBoolLine.SetActive(true);
                     newBoolLine.transform.SetParent(transform);
                     newBoolLine.transform.position = new Vector3(0, 0, 0);
-                    newBoolLine.GetComponent<circa_bool>().Plot(time_angles, booleanArray);
+                    newBoolLine.GetComponent<circa_bool>().Plot(booleanArray);
                     break;
 
                 //Skip STRING value types for now. All strings are same length for this dataset. Will improve later
